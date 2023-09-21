@@ -28,7 +28,7 @@
 
     - name: Create an Nginx virtual host configuration
       template:
-        src:  vhost.conf.j2  # Create this template file (explained below)
+        src:  template/vhost.conf.j2  # Create this template file (explained below)
         dest: /etc/nginx/sites-available/test1.playerzpot.com
         owner: root
         group: root
