@@ -1,0 +1,49 @@
+---
+- name: Configure Nginx Virtual Host
+  hosts: webserver  # Replace with your server's hostname or IP address
+  become: yes  # This allows Ansible to become a superuser (sudo) to perform privileged tasks
+
+  tasks:
+    - name: install nginx 
+      apt:
+        name: nginx
+        state: present
+
+        
+    - name: Create a directory for the website
+      file:
+        path: /var/www/code
+        state: directory
+        owner: www-data  # Change this to the appropriate web server user
+        group: www-data  # Change this to the appropriate web server group
+        mode: '0755'
+
+    - name: Create an index.html file
+      copy:
+        content: "<html><body><h1>Welcome to your website!</h1></body></html>"
+        dest: /var/www/code/index.html
+        owner: www-data
+        group: www-data
+        mode: '0644'
+
+    - name: Create an Nginx virtual host configuration
+      template:
+        src: nginx_virtual_host.j2  # Create this template file (explained below)
+        dest: /etc/nginx/sites-available/test1.playerzpot.com
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Create a symbolic link to enable the virtual host
+      file:
+        src: /etc/nginx/sites-available/test1.playerzpot.com
+        dest: /etc/nginx/sites-enabled/
+        state: link
+      notify:
+        - Reload Nginx
+
+  handlers:
+    - name: Reload Nginx
+      service:
+        name: nginx
+        state: reloaded
