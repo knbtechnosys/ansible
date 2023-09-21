@@ -12,7 +12,7 @@
         
     - name: Create a directory for the website
       file:
-        path: /var/www/code
+        path: /etc/share/nginx/html/code
         state: directory
         owner: www-data  # Change this to the appropriate web server user
         group: www-data  # Change this to the appropriate web server group
@@ -21,7 +21,7 @@
     - name: Create an index.html file
       copy:
         content: "<html><body><h1>Welcome to your website!</h1></body></html>"
-        dest: /var/www/code/index.html
+        dest: /etc/share/nginx/html/code/index.html
         owner: www-data
         group: www-data
         mode: '0644'
